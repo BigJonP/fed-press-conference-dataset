@@ -211,9 +211,7 @@ class FEDPressConferenceScraper:
         for name in self.names:
             if name in tagged_text:
                 pattern = r"\b" + re.escape(name) + r"\b"
-                tagged_text = re.sub(
-                    pattern, f"<NAME>{name}</NAME>", tagged_text, flags=re.IGNORECASE
-                )
+                tagged_text = re.sub(pattern, f"<NAME>{name}</NAME>", tagged_text)
 
         return tagged_text
 
@@ -356,12 +354,9 @@ class FEDPressConferenceScraper:
             self.logger.error(f"Error processing date {date_str}: {e}")
             return False
 
-    def scrape_predefined_dates(self, delay: float = 1.0) -> Tuple[int, int]:
+    def scrape_predefined_dates(self) -> Tuple[int, int]:
         """
         Scrape press conferences using predefined dates from file
-
-        Args:
-            delay: Delay between requests in seconds
 
         Returns:
             Tuple of (success_count, total_count)
@@ -410,8 +405,6 @@ def main() -> None:
         scraper.logger.info("Starting text cleaning process...")
         cleaned_count = scraper.clean_all_text_files()
         scraper.logger.info(f"Text cleaning completed! {cleaned_count} files cleaned successfully.")
-
-        scraper.logger.info("All processes completed successfully!")
 
     except KeyboardInterrupt:
         scraper.logger.info("Scraping interrupted by user")
